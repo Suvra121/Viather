@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/195b09452c.js" crossorigin="anonymous"></script>
+    <title>Weather Report</title>
+</head>
+<body>
+    
+    <div class="card">
+        <div class="search">
+            <input type="text" placeholder="Enter city name" autofocus>
+            <button><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <div class="report">
+            <img src="pngs/rain.png" alt="" class="mainpng">
+            <h4 class="status">rain</h4>
+            <h1 class="temp">30°c</h1>
+            <h2 class="place">Haripal</h2>
+
+            <div class="details">
+                <div class="col">
+                    <img src="pngs/humidity.png" alt="" class="png">
+                    <div>
+                        <h1 class="humidity">30%</h1>
+                        <h2 class="name">Humidity</h2>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="pngs/wind.png" alt="" class="png">
+                    <div>
+                        <h1 class="wind">30 km/h</h1>
+                        <h2 class="name">Wind Speed</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="odetails">
+        <div class="odhead">
+            <h1>Other Details</h1>
+        </div>
+        <div class="cards">
+            <div class="scard">
+                <h2>Pressure: <span class="pre">1000</span></h2> 
+                
+            </div>
+
+            <div class="scard">
+                <h2>Visibility: <span class="vis">1000</span></h2> 
+                
+            </div>
+
+            <div class="scard">
+                <h2>Feels Like: <span class="fl">1000</span></h2> 
+                
+            </div>
+
+            <div class="scard">
+                <h2>Wind Degree: <span class="wd">1000</span></h2> 
+                
+            </div>
+        </div>
+    </div>
+    
+
+<script>
+    const apikey = "915e7a7dd92575301bc7865dcde33549";
+    const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+    const searchBox = document.querySelector(".search input");
+    const searchBtn = document.querySelector(".search button");
+    const mainpng = document.querySelector(".mainpng");
+
+    async function check(place){
+        const response = await fetch(apiurl + place + `&appid=${apikey}`);
+        var data = await response.json();
+    
+        document.querySelector(".place").innerHTML = data.name;
+        document.querySelector(".status").innerHTML = data.weather[0].main;
+        document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°c";
+        document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+        document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
+
+        document.querySelector(".pre").innerHTML = data.main.pressure;
+        document.querySelector(".vis").innerHTML = data.visibility;
+        document.querySelector(".fl").innerHTML = data.main.feels_like  + "°c";
+        document.querySelector(".wd").innerHTML = data.wind.deg  + "°";
+
+
+        if(data.weather[0].main == "Clouds")
+        {
+            mainpng.src = "pngs/clouds.png";  
+        }
+        else if(data.weather[0].main == "Clear")
+        {
+            mainpng.src = "pngs/clear.png";
+        }
+        else if(data.weather[0].main == "Rain")
+        {
+            mainpng.src = "pngs/rain.png";
+        }
+        else if(data.weather[0].main == "Mist")
+        {
+            mainpng.src = "pngs/mist.png";
+        }
+        else if(data.weather[0].main == "Drizzle")
+        {
+            mainpng.src = "pngs/drizzle.png";
+        }
+
+        document.querySelector(".report").style.display = "block";
+        document.querySelector(".odetails").style.display = "block";
+    }
+    
+    searchBtn.addEventListener("click", ()=>{
+        check(searchBox.value);
+    })
+    
+</script>
+
+<!-- <script>
+    var loader = document.getElementById("loader");
+
+    window.addEventListener("load", function(){
+        loader.style.display = "none";
+    })
+</script> -->
+
+</body>
+</html>
